@@ -60,12 +60,12 @@ public class UserBalanceService {
     }
 
     public List<Operation> getOperationList(Long id, LocalDateTime startDate, LocalDateTime endDate) {
-        if (startDate == null){
-            startDate = LocalDateTime.MIN;
-        }
-        if (endDate == null) {
-            endDate = LocalDateTime.MAX;
-        }
+//        if (startDate == null){
+//            startDate = LocalDateTime.MIN;
+//        }
+//        if (endDate == null) {
+//            endDate = LocalDateTime.MAX;
+//        }
 
         User user = findUserById(id);
         LocalDateTime finalStartDate = startDate;
@@ -77,6 +77,4 @@ public class UserBalanceService {
                         .collect(Collectors.toList());
     }
 
-
-    // TODO: 23.05.2023 реализовать исключения с выводом ошибки в ответе
 }

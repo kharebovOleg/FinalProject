@@ -1,6 +1,8 @@
 package kharebov.skill.finalproject.advice;
 
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kharebov.skill.finalproject.util.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -10,10 +12,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Hidden
+@Tag(name = "Менеджер исключений", description = "обрабатывает исключения")
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)

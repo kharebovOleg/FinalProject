@@ -1,6 +1,6 @@
 package kharebov.skill.finalproject.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;

@@ -1,8 +1,7 @@
 package kharebov.skill.finalproject.controllers;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kharebov.skill.finalproject.dto.OperationsRequestDTO;
 import kharebov.skill.finalproject.dto.OperationsResponseDTO;
 import kharebov.skill.finalproject.dto.PutGetDTO;
@@ -20,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,20 +29,26 @@ import java.util.List;
 @RequiredArgsConstructor
 @Data
 @Slf4j
-@Api("Контроллер для осуществления операций")
+@Tag(name = "Operation controller", description = "контроллер для выполнения финансовых операций")
 public class OperationController {
     private final UserBalanceService userService;
     private final OperationService operationService;
     private final ModelMapper modelMapper;
 
     @GetMapping("/balance/{id}")
-    @ApiOperation("Узнать баланс по ID пользователя")
-    public Double getBalance(@PathVariable Long id) {
+    @io.swagger.v3.oas.annotations.Operation(
+            summary = "проверка баланса",
+            description = "показывает баланс клиента"
+    )
+    public Double getBalance(@PathVariable @Parameter(description = "id клиента") Long id) {
         return userService.getMoney(id);
     }
 
     @PostMapping("/take")
-    @ApiOperation("Снятие заданной суммы с баланса пользователя")
+    @io.swagger.v3.oas.annotations.Operation(
+            summary = "снятие средств",
+            description = "списывает указанную в теле запроса сумму с указанного клиента"
+    )
     public ResponseEntity<String> takeMoney(@RequestBody @Valid PutGetDTO dto) {
 
         userService.takeMoney(dto.getId(), dto.getAmount());
@@ -53,7 +60,10 @@ public class OperationController {
     }
 
     @PostMapping("/put")
-    @ApiOperation("Пополнение баланса на заданную сумму")
+    @io.swagger.v3.oas.annotations.Operation(
+            summary = "пополнение баланса",
+            description = "пополнить баланс указанного в запросе клиента на указанную сумму"
+    )
     public ResponseEntity<String> putMoney(@RequestBody @Valid PutGetDTO dto) {
 
         userService.putMoney(dto.getId(), dto.getAmount());
@@ -66,7 +76,10 @@ public class OperationController {
     }
 
     @PostMapping("/transfer")
-    @ApiOperation("Перевести заданную сумму другому пользователю")
+    @io.swagger.v3.oas.annotations.Operation(
+            summary = "перевод средств",
+            description = "переводит средства со счета другому клиенту"
+    )
     public ResponseEntity<String> transferMoney(@RequestBody @Valid TransferDTO dto) {
 
         userService.transferMoney(dto.getSenderId(), dto.getRecipientId(), dto.getAmount());
@@ -83,9 +96,17 @@ public class OperationController {
     }
 
     @PostMapping("/operations")
-    @ApiOperation("Отобразить список операций за выбранный период")
+    @io.swagger.v3.oas.annotations.Operation(
+            summary = "Отобразить список операций за выбранный период"
+    )
     public ResponseEntity<List<String>> getOperationList(@RequestBody @Valid OperationsRequestDTO dto) {
 
+        if (dto.getStartDate() == null){
+            dto.setStartDate(LocalDateTime.MIN);
+        }
+        if (dto.getEndDate() == null) {
+            dto.setEndDate(LocalDateTime.MAX);
+        }
         if (dto.getStartDate().isAfter(dto.getEndDate())) throw new DataMistakeException(
                 "end_date should be later then start_date");
 
