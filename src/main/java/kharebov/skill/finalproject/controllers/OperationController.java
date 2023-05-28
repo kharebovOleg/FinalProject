@@ -1,7 +1,8 @@
 package kharebov.skill.finalproject.controllers;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import jakarta.validation.Valid;
+
 import kharebov.skill.finalproject.dto.OperationsRequestDTO;
 import kharebov.skill.finalproject.dto.OperationsResponseDTO;
 import kharebov.skill.finalproject.dto.PutGetDTO;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Data
 @Slf4j
+@Api("Контроллер для осуществления операций")
 public class OperationController {
     private final UserBalanceService userService;
     private final OperationService operationService;
@@ -39,30 +42,32 @@ public class OperationController {
 
     @PostMapping("/take")
     @ApiOperation("Снятие заданной суммы с баланса пользователя")
-    public ResponseEntity<HttpStatus> takeMoney(@RequestBody @Valid PutGetDTO dto) {
+    public ResponseEntity<String> takeMoney(@RequestBody @Valid PutGetDTO dto) {
 
         userService.takeMoney(dto.getId(), dto.getAmount());
         Operation operation = operationService.createOperation(dto.getId(), dto.getAmount(), OperationType.TAKE);
         operationService.saveOperation(operation);
 
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        return new ResponseEntity<>("an amount has been withdrawn from your balance", HttpStatus.OK);
     }
 
     @PostMapping("/put")
     @ApiOperation("Пополнение баланса на заданную сумму")
-    public ResponseEntity<HttpStatus> putMoney(@RequestBody @Valid PutGetDTO dto) {
+    public ResponseEntity<String> putMoney(@RequestBody @Valid PutGetDTO dto) {
 
         userService.putMoney(dto.getId(), dto.getAmount());
         Operation operation = operationService.createOperation(dto.getId(), dto.getAmount(), OperationType.PUT);
         operationService.saveOperation(operation);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        return new ResponseEntity<>(
+                "your balance has been replenished by the amount of "
+                        + dto.getAmount() + ".",HttpStatus.OK);
     }
 
     @PostMapping("/transfer")
     @ApiOperation("Перевести заданную сумму другому пользователю")
-    public ResponseEntity<HttpStatus> transferMoney(@RequestBody @Valid TransferDTO dto) {
+    public ResponseEntity<String> transferMoney(@RequestBody @Valid TransferDTO dto) {
 
         userService.transferMoney(dto.getSenderId(), dto.getRecipientId(), dto.getAmount());
 
@@ -74,7 +79,7 @@ public class OperationController {
                 dto.getAmount(), OperationType.TRANSFERFROM);
         operationService.saveOperation(transferFrom);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        return new ResponseEntity<>("amount transferred",HttpStatus.OK);
     }
 
     @PostMapping("/operations")
@@ -103,19 +108,5 @@ public class OperationController {
         }
         return operationsInfo;
     }
-//    private StringBuilder createMsg(BindingResult b) {
-//        StringBuilder errorMsg = new StringBuilder();
-//
-//        List<FieldError> errors = b.getFieldErrors();
-//        for (FieldError error : errors) {
-//            errorMsg.append(error.getField())
-//                    .append(" - ").append(error.getDefaultMessage())
-//                    .append(";");
-//        }
-//        return errorMsg;
-//    }
-
-
-
 
 }

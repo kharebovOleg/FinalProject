@@ -1,9 +1,8 @@
 package kharebov.skill.finalproject.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import kharebov.skill.finalproject.util.enums.OperationType;
 import lombok.Data;
 
@@ -30,7 +29,6 @@ public class Operation {
     private OperationType type;
 
     @Column(name = "time")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime time;
 
     @ManyToOne
