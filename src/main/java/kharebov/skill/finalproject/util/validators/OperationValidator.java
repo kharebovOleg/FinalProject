@@ -1,4 +1,4 @@
-package kharebov.skill.finalproject.util;
+package kharebov.skill.finalproject.util.validators;
 
 import kharebov.skill.finalproject.entity.Operation;
 import org.springframework.stereotype.Component;

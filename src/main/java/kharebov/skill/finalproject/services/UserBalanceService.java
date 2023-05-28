@@ -3,6 +3,7 @@ package kharebov.skill.finalproject.services;
 import kharebov.skill.finalproject.entity.Operation;
 import kharebov.skill.finalproject.entity.User;
 import kharebov.skill.finalproject.repositories.UserRepository;
+import kharebov.skill.finalproject.util.enums.OperationType;
 import kharebov.skill.finalproject.util.exceptions.NotEnoughMoneyException;
 import kharebov.skill.finalproject.util.exceptions.SameIdException;
 import kharebov.skill.finalproject.util.exceptions.UserNotFoundException;
@@ -22,7 +23,9 @@ public class UserBalanceService {
     private final UserRepository userRepository;
 
     public User findUserById(Long id){
-        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) return user;
+        else throw new UserNotFoundException("user with id: " + id + " not found");
     }
 
     public Double getMoney(Long id) {
@@ -46,10 +49,14 @@ public class UserBalanceService {
     }
 
     public void transferMoney(Long senderId, Long recipientId, Double amount) {
+        findUserById(recipientId); // проверяет, есть ли получатель, если нет чтобы код не списал деньги с отправителя
         if (Objects.equals(senderId, recipientId))
-            throw new SameIdException("the sender's id and the recipient's id are equal");
+            throw new SameIdException(
+                    "the sender's id :" + senderId +" and the recipient's id : " + recipientId +" are equal");
+
         takeMoney(senderId, amount);
         putMoney(recipientId, amount);
+
     }
 
     public List<Operation> getOperationList(Long id, LocalDateTime startDate, LocalDateTime endDate) {
