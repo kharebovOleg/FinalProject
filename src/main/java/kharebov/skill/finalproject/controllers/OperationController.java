@@ -55,8 +55,7 @@ public class OperationController {
         Operation operation = operationService.createOperation(dto.getId(), dto.getAmount(), OperationType.TAKE);
         operationService.saveOperation(operation);
 
-
-        return new ResponseEntity<>("an amount has been withdrawn from your balance", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/put")
@@ -70,9 +69,7 @@ public class OperationController {
         Operation operation = operationService.createOperation(dto.getId(), dto.getAmount(), OperationType.PUT);
         operationService.saveOperation(operation);
 
-        return new ResponseEntity<>(
-                "your balance has been replenished by the amount of "
-                        + dto.getAmount() + ".",HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/transfer")
@@ -92,7 +89,7 @@ public class OperationController {
                 dto.getAmount(), OperationType.TRANSFERFROM);
         operationService.saveOperation(transferFrom);
 
-        return new ResponseEntity<>("amount transferred",HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/operations")
