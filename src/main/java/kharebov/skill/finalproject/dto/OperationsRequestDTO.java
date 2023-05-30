@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -21,9 +22,9 @@ public class OperationsRequestDTO {
 
     @PastOrPresent(message = "date can not be in future")
     @Schema(description = "с какой даты показать операции")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Schema(description = "до какой даты показать операции")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
 }

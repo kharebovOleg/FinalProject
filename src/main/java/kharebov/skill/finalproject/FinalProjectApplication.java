@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 
 
 @SpringBootApplication
-
 public class FinalProjectApplication {
 
     public static void main(String[] args) {

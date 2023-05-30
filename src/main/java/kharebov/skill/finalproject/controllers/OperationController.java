@@ -98,18 +98,23 @@ public class OperationController {
     )
     public ResponseEntity<List<String>> getOperationList(@RequestBody @Valid OperationsRequestDTO dto) {
 
+        LocalDateTime startTime;
+        LocalDateTime endTime;
+
         if (dto.getStartDate() == null){
-            dto.setStartDate(LocalDateTime.MIN);
-        }
+            startTime = LocalDateTime.MIN;
+        } else startTime = dto.getStartDate().atTime(0,0,0);
+
         if (dto.getEndDate() == null) {
-            dto.setEndDate(LocalDateTime.MAX);
-        }
-        if (dto.getStartDate().isAfter(dto.getEndDate())) throw new DataMistakeException(
+            endTime = LocalDateTime.MAX;
+        } else endTime = dto.getEndDate().atTime(23,59,59);
+
+        if (startTime.isAfter(endTime)) throw new DataMistakeException(
                 "end_date should be later then start_date");
 
         List<String> operations = new ArrayList<>();
         for (OperationsResponseDTO operationsResponseDTO : convertToOperationResponseDTO(userService.getOperationList(dto.getId(),
-                dto.getStartDate(), dto.getEndDate()))) {
+                startTime, endTime))) {
             String toString = operationsResponseDTO.toString();
             operations.add(toString);
         }
@@ -126,5 +131,4 @@ public class OperationController {
         }
         return operationsInfo;
     }
-
 }
