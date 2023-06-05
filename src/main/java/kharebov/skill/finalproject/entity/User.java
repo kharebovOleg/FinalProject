@@ -1,5 +1,6 @@
 package kharebov.skill.finalproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +16,8 @@ public class User {
     private Long id;
     @Column(name = "balance")
     private Double balance;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private List<Operation> operations;
 

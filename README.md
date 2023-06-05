@@ -67,5 +67,5 @@ ___
 ## Скриншот базы данных
 
 ---
-![alt text](2023-05-30_10-15-50.png "Logo Title Text 1")
+![alt text](2023-06-05_18-52-56.png "Logo Title Text 1")
 

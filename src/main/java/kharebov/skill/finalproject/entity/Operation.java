@@ -1,9 +1,10 @@
 package kharebov.skill.finalproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import kharebov.skill.finalproject.util.enums.OperationType;
+import kharebov.skill.finalproject.utils.enums.OperationType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class Operation {
     @Column(name = "time")
     private LocalDateTime time;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User owner;
@@ -38,10 +40,10 @@ public class Operation {
     @Override
     public String toString() {
         return "Operation{" +
-                "id=" + id +
-                ", amount=" + amount +
-                ", type='" + type + '\'' +
-                ", time=" + time +
+
+                "время=" + time +
+                ", тип='" + type + '\'' +
+                ", сумма=" + amount +
                 '}';
     }
 }
